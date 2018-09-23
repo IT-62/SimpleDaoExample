@@ -16,7 +16,7 @@ import java.util.Iterator;
 import static com.mongodb.client.model.Filters.eq;
 
 
-public class UserNoSqlDao implements UserDao {
+public class UserNoSqlDao extends UserDao {
     MongoClient mongoClient;
     MongoDatabase mongoDatabase;
     private MongoCollection<Document> users;
@@ -36,7 +36,7 @@ public class UserNoSqlDao implements UserDao {
     }
 
     @Override
-    public User getById(int id) throws SQLException {
+    public User getById(int id) {
         if(users != null) {
             return fromDocument(users.find(eq("id", id)).first());
         }
@@ -44,21 +44,21 @@ public class UserNoSqlDao implements UserDao {
     }
 
     @Override
-    public void update(User entity) throws SQLException {
+    public void update(User entity) {
         if(users != null) {
             users.updateOne(eq("id", entity.getId()), toDocument(entity));
         }
     }
 
     @Override
-    public void delete(User entity) throws SQLException {
+    public void delete(User entity) {
         if(users != null) {
             users.deleteOne(eq("id", entity.getId()));
         }
     }
 
     @Override
-    public ArrayList<User> getAll() throws SQLException {
+    public ArrayList<User> getAll() {
         ArrayList<User> res = new ArrayList<>();
         if(users != null) {
             Iterator it = users.find().iterator();
@@ -81,4 +81,8 @@ public class UserNoSqlDao implements UserDao {
         return doc;
     }
 
+    @Override
+    public void closeCon() {
+        mongoClient.close();
+    }
 }

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class UserJdbcDao implements UserDao {
+public class UserJdbcDao extends UserDao {
     private final String INSERT_NEW = "INSERT INTO users(username, password) VALUES(?, ?)";
     private final String GET_BY_ID = "SELECT * FROM users WHERE id=?";
     private final String UPDATE = "UPDATE users SET username=?, password=? WHERE id=?";
@@ -32,6 +32,7 @@ public class UserJdbcDao implements UserDao {
             try {
                 preparedStatement = connection.prepareStatement(INSERT_NEW);
                 preparedStatement.setString(1, entity.getUsername());
+                preparedStatement.setString(2, entity.getPassword());
                 preparedStatement.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -67,6 +68,7 @@ public class UserJdbcDao implements UserDao {
                 preparedStatement = connection.prepareStatement(UPDATE);
                 preparedStatement.setString(1, entity.getUsername());
                 preparedStatement.setString(2, entity.getPassword());
+                preparedStatement.setInt(3, entity.getId());
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -109,7 +111,8 @@ public class UserJdbcDao implements UserDao {
         return res;
     }
 
-    public void closeConnection() {
+    @Override
+    public void closeCon() {
         if(connection != null) {
             try {
                 connection.close();
