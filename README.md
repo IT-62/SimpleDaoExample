@@ -1,2 +1,1 @@
-# SimpleDaoExample
-Java 2 DAO(JDBC + NoSql) Lab01
+# Лаба №1: Простой пример реализации DAO на JDBC и NoSql(GRUD операции).
